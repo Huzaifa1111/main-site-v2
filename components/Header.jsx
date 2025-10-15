@@ -22,9 +22,8 @@ export default function Header() {
       setIsMobile(window.innerWidth < 1024); // 1024px is the lg breakpoint
     };
 
-    // Initial checks
+    // Initial check
     checkMobile();
-    handleScroll();
 
     // Event listeners
     window.addEventListener("scroll", handleScroll);
@@ -55,40 +54,50 @@ export default function Header() {
   // Don't show main header on products page for mobile
   const showMainHeader = !(isMobile && (isProductsPage || isPricingPage));
 
+  // Determine background color for laptop screens - MOVED AFTER PAGE VARIABLES
   // Determine background color for laptop screens
   const getHeaderBackground = () => {
-    // For mobile screens
-    if (isMobile) {
+    // For laptop screens (non-mobile)
+    if (!isMobile) {
       if (scrolled) {
         return "bg-gradient-to-r from-[#1C45A7] to-[#0B1B41]";
       }
-      // For specific pages on mobile including about
-      if (pathname === "/services" || pathname.startsWith("/services/") || 
-          pathname === "/products" || pathname === "/pricing" || pathname === "/about") {
-        return "bg-[#175CFF]";
+      // For laptop home page when not scrolled - transparent
+      if (pathname === "/") {
+        return ""; // Transparent for laptop home page
       }
-      return ""; // Transparent for other mobile pages when not scrolled
+      // For other pages (products, pricing, services, about) - always show blue background
+      if (
+        pathname === "/products" ||
+        pathname === "/pricing" ||
+        pathname === "/about" ||
+        pathname === "/services" ||
+        pathname.startsWith("/services/")
+      ) {
+        return "bg-[#175CFF]"; // Blue background for these pages
+      }
+      return "bg-[#175CFF]"; // Default blue background for other laptop pages
     }
-    
-    // For laptop screens (non-mobile)
-    if (scrolled) {
-      return "bg-gradient-to-r from-[#1C45A7] to-[#0B1B41]";
-    }
-    // For laptop home page when not scrolled - transparent
-    if (pathname === "/") {
-      return ""; // Transparent for laptop home page
-    }
-    // For other pages (products, pricing, services, about) - always show blue background
-    if (
-      pathname === "/products" ||
-      pathname === "/pricing" ||
-      pathname === "/services" ||
-      pathname.startsWith("/services/") ||
-      pathname === "/about"
-    ) {
-      return "bg-[#175CFF]";
-    }
-    return "bg-[#175CFF]";
+
+    // For mobile, use existing logic but make home page transparent initially
+    // For mobile, use existing logic but make home page transparent initially
+// For mobile, use existing logic but make home page transparent initially
+if (scrolled) {
+  return "bg-gradient-to-r from-[#1C45A7] to-[#0B1B41]";
+}
+// For mobile about page - always show blue background (even when not scrolled)
+if (pathname === "/about") {
+  return "bg-[#175CFF]";
+}
+// For mobile home page - transparent when not scrolled
+if (pathname === "/") {
+  return ""; // Transparent for mobile home page when not scrolled
+}
+if (isServicesPage || isStoragePage || isSourcingPage || 
+    isThreePlServicePage || isProductQualityCheckPage || isProductsPage || isPricingPage) {
+  return "bg-[#175CFF]";
+}
+return ""; // Transparent for other mobile pages when not scrolled// Transparent for other mobile pages when not scrolled// Transparent for other mobile pages when not scrolled
   };
 
   return (
