@@ -1,6 +1,6 @@
 export default function HotItems() {
   const items = [
-    { title: 'Tech', desc: 'Sell our tech products and earn in AED.', img: '/headphone.png' },
+    { title: 'Tech', desc: 'Sell our tech products and earn in AED.', img: '/headphone.webp' },
     { title: 'Personal Care', desc: 'High demand products with high quality.', img: '/it2.png' },
     { title: 'Home Appliances', desc: 'Sell our home appliances for smarter homes.', img: '/it9.png' },
     { title: 'Make-up', desc: 'High quality branded products.', img: '/it8.png' },

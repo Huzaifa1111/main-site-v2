@@ -4,13 +4,7 @@ export default function ProductsHero() {
   return (
     <section className="bg-gray-100 relative overflow-hidden text-white md:pt-40 md:px-32">
       {/* Mobile Logo */}
-      <div className="md:hidden absolute top-4 left-4 z-20">
-        <img
-          src="/group (3).png"
-          alt="Naxi Logo"
-          className="w-20 h-auto"
-        />
-      </div>
+      
 
       <div className="max-w-7xl mx-auto relative">
         {/* Main Card Container */}
@@ -28,7 +22,7 @@ export default function ProductsHero() {
               className="z-20 absolute -left-14 top-31 w-60 h-60 md:left-20 md:top-40 md:w-75 md:h-75 object-contain -rotate-6"
             />
             <img
-              src="/it12.png"
+              src="/it12.webp"
               alt="Product 3"
               className="z-20 absolute -right-2 -bottom-10 w-35 h-35 md:-right-2 md:bottom-25 md:w-75 md:h-75 object-contain rotate-24"
             />

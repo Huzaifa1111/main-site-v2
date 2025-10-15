@@ -2,13 +2,14 @@
 
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
-import { Home, Package, Users, User, Menu, X } from "lucide-react";
+import { Home, Package, Users, User, Menu, X, ChevronDown } from "lucide-react";
 import { FaWarehouse, FaSearch, FaTruck, FaClipboardCheck } from "react-icons/fa";
 
 export default function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [servicesOpen, setServicesOpen] = useState(false);
+  const [servicesDropdownOpen, setServicesDropdownOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const pathname = usePathname();
 
@@ -21,13 +22,14 @@ export default function Header() {
       setIsMobile(window.innerWidth < 1024); // 1024px is the lg breakpoint
     };
 
-    // Initial check
+    // Initial checks
     checkMobile();
-    
+    handleScroll();
+
     // Event listeners
     window.addEventListener("scroll", handleScroll);
     window.addEventListener("resize", checkMobile);
-    
+
     return () => {
       window.removeEventListener("scroll", handleScroll);
       window.removeEventListener("resize", checkMobile);
@@ -47,41 +49,66 @@ export default function Header() {
   const isHomePage = pathname === "/";
   const isProfilePage = pathname === "/profile";
 
-  // Don't show main header on products page for mobile
-const showMainHeader = !(isMobile && (isProductsPage || isPricingPage));
+  // Check if any services subpage is active for desktop dropdown highlighting
+  const isAnyServicesPage = isServicesPage || isStoragePage || isSourcingPage || isThreePlServicePage || isProductQualityCheckPage;
 
+  // Don't show main header on products page for mobile
+  const showMainHeader = !(isMobile && (isProductsPage || isPricingPage));
+
+  // Determine background color for laptop screens
+  const getHeaderBackground = () => {
+    // For mobile screens
+    if (isMobile) {
+      if (scrolled) {
+        return "bg-gradient-to-r from-[#1C45A7] to-[#0B1B41]";
+      }
+      // For specific pages on mobile including about
+      if (pathname === "/services" || pathname.startsWith("/services/") || 
+          pathname === "/products" || pathname === "/pricing" || pathname === "/about") {
+        return "bg-[#175CFF]";
+      }
+      return ""; // Transparent for other mobile pages when not scrolled
+    }
+    
+    // For laptop screens (non-mobile)
+    if (scrolled) {
+      return "bg-gradient-to-r from-[#1C45A7] to-[#0B1B41]";
+    }
+    // For laptop home page when not scrolled - transparent
+    if (pathname === "/") {
+      return ""; // Transparent for laptop home page
+    }
+    // For other pages (products, pricing, services, about) - always show blue background
+    if (
+      pathname === "/products" ||
+      pathname === "/pricing" ||
+      pathname === "/services" ||
+      pathname.startsWith("/services/") ||
+      pathname === "/about"
+    ) {
+      return "bg-[#175CFF]";
+    }
+    return "bg-[#175CFF]";
+  };
 
   return (
     <>
       {/* Main Header - Original Desktop Version - Hidden on Products page for mobile */}
       {showMainHeader && (
         <header
-          className={`py-6 px-6 flex justify-between items-center fixed w-full z-50 transition-all duration-300 ${
-            scrolled
-              ? "bg-gradient-to-r from-[#1C45A7] to-[#0B1B41]"
-              : isAboutPage ||
-                isServicesPage ||
-                isStoragePage ||
-                isSourcingPage ||
-                isThreePlServicePage ||
-                isProductQualityCheckPage ||
-                isProductsPage ||
-                isPricingPage
-              ? "bg-[#175CFF]"
-              : ""
-          }`}
+          className={`py-6 px-6 flex justify-between items-center fixed w-full z-50 transition-all duration-300 ${getHeaderBackground()}`}
         >
           {/* Logo */}
           <div className="flex items-center">
             <img
-              src="/group (3).png"
+              src="/my7.webp"
               alt="Naxi Logo"
               className="md:w-32 w-26 h-auto cursor-pointer"
             />
           </div>
 
-          {/* Desktop Nav - Original */}
-          <nav className="hidden lg:flex space-x-20">
+          {/* Desktop Nav - Updated with Services Dropdown */}
+          <nav className="hidden lg:flex space-x-20 items-center">
             <a href="/" className="text-white hover:underline">
               Home
             </a>
@@ -91,9 +118,73 @@ const showMainHeader = !(isMobile && (isProductsPage || isPricingPage));
             <a href="/about" className="text-white hover:underline">
               About Us
             </a>
-            <a href="/services" className="text-white hover:underline">
-              Services
-            </a>
+
+            {/* Services Dropdown */}
+            <div className="relative">
+              <button
+                className={`flex items-center space-x-1 ${isAnyServicesPage ? "text-blue-300 underline" : "text-white"
+                  } hover:underline transition-colors`}
+                onMouseEnter={() => setServicesDropdownOpen(true)}
+                onMouseLeave={() => setServicesDropdownOpen(false)}
+              >
+                <span>Services</span>
+                <ChevronDown
+                  size={16}
+                  className={`transform transition-transform ${servicesDropdownOpen ? "rotate-180" : ""
+                    }`}
+                />
+              </button>
+
+              {/* Dropdown Menu */}
+              {servicesDropdownOpen && (
+                <div
+                  className="absolute top-full left-0 mt-2 w-64 bg-white rounded-lg shadow-lg py-2 z-50"
+                  onMouseEnter={() => setServicesDropdownOpen(true)}
+                  onMouseLeave={() => setServicesDropdownOpen(false)}
+                >
+                  <a
+                    href="/services"
+                    className={`flex items-center gap-3 px-4 py-3 text-sm hover:bg-blue-50 transition-colors ${isServicesPage ? "text-blue-600 font-medium bg-blue-50" : "text-gray-700"
+                      }`}
+                  >
+                    <span>All Services</span>
+                  </a>
+                  <a
+                    href="/services/storage"
+                    className={`flex items-center gap-3 px-4 py-3 text-sm hover:bg-blue-50 transition-colors ${isStoragePage ? "text-blue-600 font-medium bg-blue-50" : "text-gray-700"
+                      }`}
+                  >
+                    <FaWarehouse size={16} className="text-blue-500" />
+                    <span>Storage</span>
+                  </a>
+                  <a
+                    href="/services/sourcing"
+                    className={`flex items-center gap-3 px-4 py-3 text-sm hover:bg-blue-50 transition-colors ${isSourcingPage ? "text-blue-600 font-medium bg-blue-50" : "text-gray-700"
+                      }`}
+                  >
+                    <FaSearch size={16} className="text-blue-500" />
+                    <span>Sourcing</span>
+                  </a>
+                  <a
+                    href="/services/threeplservice"
+                    className={`flex items-center gap-3 px-4 py-3 text-sm hover:bg-blue-50 transition-colors ${isThreePlServicePage ? "text-blue-600 font-medium bg-blue-50" : "text-gray-700"
+                      }`}
+                  >
+                    <FaTruck size={16} className="text-blue-500" />
+                    <span>3PL Service</span>
+                  </a>
+                  <a
+                    href="/services/productqualitycheck"
+                    className={`flex items-center gap-3 px-4 py-3 text-sm hover:bg-blue-50 transition-colors ${isProductQualityCheckPage ? "text-blue-600 font-medium bg-blue-50" : "text-gray-700"
+                      }`}
+                  >
+                    <FaClipboardCheck size={16} className="text-blue-500" />
+                    <span>Quality Check</span>
+                  </a>
+                </div>
+              )}
+            </div>
+
             <a href="/pricing" className="text-white hover:underline">
               Pricing
             </a>
@@ -123,12 +214,13 @@ const showMainHeader = !(isMobile && (isProductsPage || isPricingPage));
         </header>
       )}
 
+      {/* Rest of your mobile bottom navigation and more menu remains the same */}
       {/* Mobile Bottom Navigation Bar - Updated with Union.png for selected tab */}
       <div className="lg:hidden fixed bottom-0  bg-blue-500 border-t rounded-tl-2xl rounded-tr-2xl border-gray-200 z-40">
         <div className="flex justify-around items-center">
           {/* Home Tab */}
-          <a 
-            href="/" 
+          <a
+            href="/"
             className="flex flex-col items-center relative flex-1"
           >
             {isHomePage ? (
@@ -152,10 +244,10 @@ const showMainHeader = !(isMobile && (isProductsPage || isPricingPage));
               </div>
             )}
           </a>
-          
+
           {/* Products Tab */}
-          <a 
-            href="/products" 
+          <a
+            href="/products"
             className="flex flex-col items-center relative flex-1"
           >
             {isProductsPage ? (
@@ -179,10 +271,10 @@ const showMainHeader = !(isMobile && (isProductsPage || isPricingPage));
               </div>
             )}
           </a>
-          
+
           {/* About Us Tab */}
-          <a 
-            href="/about" 
+          <a
+            href="/about"
             className="flex flex-col items-center relative flex-1"
           >
             {isAboutPage ? (
@@ -206,10 +298,10 @@ const showMainHeader = !(isMobile && (isProductsPage || isPricingPage));
               </div>
             )}
           </a>
-          
+
           {/* Profile Tab */}
-          <a 
-            href="/profile" 
+          <a
+            href="/profile"
             className="flex flex-col items-center relative flex-1"
           >
             {isProfilePage ? (
@@ -235,7 +327,7 @@ const showMainHeader = !(isMobile && (isProductsPage || isPricingPage));
           </a>
 
           {/* More Tab */}
-          <button 
+          <button
             onClick={() => setMenuOpen(true)}
             className="flex flex-col items-center relative flex-1 text-white hover:text-gray-200 transition-colors"
           >
@@ -254,7 +346,7 @@ const showMainHeader = !(isMobile && (isProductsPage || isPricingPage));
             {/* Header */}
             <div className="flex justify-between items-center p-6 border-b border-blue-400">
               <h2 className="text-lg font-semibold text-white">Menu</h2>
-              <button 
+              <button
                 onClick={() => setMenuOpen(false)}
                 className="p-2 hover:bg-blue-600 rounded-full text-white"
               >
@@ -264,12 +356,12 @@ const showMainHeader = !(isMobile && (isProductsPage || isPricingPage));
 
             {/* Main Pages */}
             <div className="p-4 space-y-2">
-              <a 
-                href="/services" 
+              <a
+                href="/services"
                 className="flex items-center justify-between p-3 hover:bg-blue-600 rounded-lg text-white transition-colors"
               >
                 <span className="font-medium">Services</span>
-                <button 
+                <button
                   onClick={(e) => {
                     e.preventDefault();
                     setServicesOpen(!servicesOpen);
@@ -315,11 +407,11 @@ const showMainHeader = !(isMobile && (isProductsPage || isPricingPage));
               <a href="/alerts" className="flex items-center p-3 hover:bg-blue-600 rounded-lg text-white transition-colors">
                 <span className="font-medium">Alerts</span>
               </a>
+
             </div>
           </div>
         </div>
-      )}  
-
+      )}
     </>
   );
-}  
+}

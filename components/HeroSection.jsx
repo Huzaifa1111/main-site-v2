@@ -16,19 +16,19 @@ export default function HeroSection() {
     {
       images: [
         {
-          src: "/headphone.png",
+          src: "/headphone.webp",
           className: "w-33 absolute -left-14 -top-8 w-20 transform -rotate-34",
         },
         {
-          src: "/it12.png",
+          src: "/it12.webp",
           className: "w-25 absolute right-66 -top-52 w-20 transform rotate-6",
         },
         {
-          src: "/it5.png",
+          src: "/it5.webp",
           className: "w-25 absolute left-62 -top-40 w-18 transform -rotate-19 z-0",
         },
         {
-          src: "/it10.png",
+          src: "/it10.webp",
           className: "w-60 absolute -right-22 top-2 w-18 transform rotate-28",
         },
       ],
@@ -120,7 +120,7 @@ export default function HeroSection() {
     {
       images: [
         {
-          src: "/headphone.png",
+          src: "/headphone.webp",
           className: "absolute -left-12 top-20 w-73 transform rotate-36",
         },
         {
@@ -128,11 +128,11 @@ export default function HeroSection() {
           className: "absolute left-49 top-68 w-115 transform -rotate-6 z-0",
         },
         {
-          src: "/it12.png",
+          src: "/it12.webp",
           className: "absolute right-20 top-2 w-70 transform rotate-12",
         },
         {
-          src: "/it10.png",
+          src: "/it10.webp",
           className: "absolute right-25 -bottom-20 w-175 transform rotate-25",
         },
       ],

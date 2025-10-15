@@ -2,7 +2,7 @@ export default function ExploreItems() {
   const items = [
     {
       title: 'Explore hot-selling items in these categories',
-      imgs: ['/headphone.png', '/it5.png', '/it1.png'],
+      imgs: ['/headphone.webp', '/it5.webp', '/my6.png'],
       button: 'Browse'
     },
     {
@@ -13,41 +13,55 @@ export default function ExploreItems() {
     {
       title: 'Supplements',
       desc: 'Limited time vault unlock for all our sellers.',
-      img: '/it3.png',
+      img: '/my5.png',
       button: 'Show more'
     },
     {
       title: 'Personal Care',
       desc: 'Beauty and care accessories for woman.',
-      img: '/it10.png',
+      img: '/it10.webp',
       button: 'Show more'
     },
   ];
 
   return (
-    <section className=" text-white py-10 px-4 sm:px-6 md:px-24">
+    <section className=" text-white py-10 md:py-10 px-4 sm:px-6 md:px-40">
       {/* Desktop & Tablet Layout */}
-      <div className="hidden md:grid grid-cols-1 lg:grid-cols-2 gap-6 px-4 lg:px-12">
-        <div className="relative rounded-3xl overflow-hidden shadow-lg bg-gradient-to-b from-[#0E3799] to-[#175CFF] flex flex-col items-center justify-between h-[540px] p-8">
-          <div className="p-4 text-center">
-            <div className="whitespace-normal text-xl mb-4 leading-tight">
-              Explore hot-selling<br />items in these categories
-            </div>
-            <button className="bg-white text-naxi-blue px-18 py-2 rounded-lg text-sm font-medium hover:bg-gray-200">
-              {items[0].button}
-            </button>
-          </div>
-          <div className="relative w-full flex-1 flex items-center justify-center">
-            <img src={items[0].imgs[0]} alt={items[0].title} className="w-[250px] h-[290px] object-cover rotate-16 z-40 mt-20" />
-            <img src={items[0].imgs[1]} alt={`${items[0].title} 2`} className="w-[180px] h-[180px] object-cover absolute bottom-32 left-24 -rotate-16" />
-            <img src={items[0].imgs[2]} alt={`${items[0].title} 3`} className="w-[150px] h-[150px] object-cover absolute bottom-32 right-18 rotate-16" />
-          </div>
-        </div>
+      <div className="hidden md:grid grid-cols-1 lg:grid-cols-2 gap-6 px-4 lg:px-32">
+  <div className="relative rounded-3xl overflow-visible shadow-lg bg-gradient-to-b from-[#0E3799] to-[#175CFF] flex flex-col items-center justify-between h-[540px]">
+    <div className="p-1 text-center mt-16">
+      <div className="whitespace-normal text-2xl mb-4 leading-tight">
+        Explore hot-selling items <br /> in these categories
+      </div>
+      <button className="bg-white text-naxi-blue px-18 py-3 rounded-lg text-lg font-bold hover:bg-gray-200">
+        {items[0].button}
+      </button>
+    </div>
+
+    <div className="relative w-full flex-1 flex items-center justify-center">
+      <img
+        src={items[0].imgs[0]}
+        alt={items[0].title}
+        className="w-[300px] h-auto object-cover rotate-16 z-40 -translate-y-10"  
+      />
+      <img
+        src={items[0].imgs[1]}
+        alt={`${items[0].title} 2`}
+        className="w-[180px] h-[180px] object-cover absolute bottom-60 left-18 -rotate-16"
+      />
+      <img
+        src={items[0].imgs[2]}
+        alt={`${items[0].title} 3`}
+        className="w-[200px] h-auto object-cover absolute bottom-50 right-12"
+      />
+    </div>
+  </div>
+
 
         <div className="flex flex-col gap-6">
           <div className="relative rounded-3xl overflow-hidden shadow-lg bg-gradient-to-b from-[#0E3799] to-[#175CFF] flex flex-col justify-between h-[230px] p-8">
             <div className="text-left">
-              <h3 className="font-bold text-2xl mb-4 leading-snug break-words w-3/4">
+              <h3 className=" text-xl mb-4 leading-snug  w-3/4">
                 {items[1].title}
               </h3>
               <button className="bg-white text-naxi-blue px-8 py-2 rounded-md text-base font-medium hover:bg-gray-200">
@@ -64,7 +78,7 @@ export default function ExploreItems() {
             {items.slice(2, 4).map((item, idx) => (
               <div
                 key={idx}
-                className="relative rounded-3xl overflow-hidden shadow-lg bg-gradient-to-b from-[#0E3799] to-[#175CFF] flex flex-col h-[285px] p-6"
+                className="relative rounded-3xl overflow-hidden shadow-lg bg-gradient-to-b from-[#0E3799] to-[#175CFF] flex flex-col h-[285px] p-8"
               >
                 <div className="text-left mb-4">
                   <h3 className="font-bold text-xl">{item.title}</h3>
@@ -77,7 +91,7 @@ export default function ExploreItems() {
                   <img
                     src={item.img}
                     alt={item.title}
-                    className={`object-cover ${idx === 0 ? 'w-[290px] h-[290px] pb-6' : 'w-[200px] h-[200px]'}`}
+                    className={`object-cover ${idx === 0 ? 'w-[265px] h-auto mt-8 ' : 'w-[200px] h-[200px]'}`}
                   />
                 </div>
               </div>
