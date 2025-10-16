@@ -2,8 +2,15 @@
 
 export default function ProductsHero() {
   return (
-    <section className="bg-gray-100 relative overflow-hidden text-white md:pt-40 md:px-32">
+    <section className="bg-gray-100 relative overflow-hidden text-white  md:pt-40 md:px-32">
       {/* Mobile Logo */}
+
+       {/* Logo on top left */}
+        <img
+          src="/Group (3).png"
+          alt="Naxi Logo"
+          className="z-20 absolute left-4 top-4 w-20 h-auto object-contain"
+        />
       
 
       <div className="max-w-7xl mx-auto relative">

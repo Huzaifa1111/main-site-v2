@@ -35,320 +35,269 @@ export default function Header() {
     };
   }, []);
 
-  const isAboutPage = pathname === "/about";
-  const isServicesPage = pathname === "/services";
+const isAboutPage = pathname === "/about" || pathname === "/about/"; 
+ const isServicesPage = pathname === "/services";
   const isStoragePage = pathname === "/services/storage";
   const isSourcingPage = pathname === "/services/sourcing";
   const isThreePlServicePage = pathname === "/services/threeplservice";
   const isProductQualityCheckPage = pathname === "/services/productqualitycheck";
-  const isProductsPage = pathname === "/products";
+const isProductsPage = pathname === "/products" || pathname === "/products/";
   const isPricingPage = pathname === "/pricing";
 
   // Check active tab for mobile bottom navigation
   const isHomePage = pathname === "/";
-  const isProfilePage = pathname === "/profile";
-
+const isProfilePage = pathname === "/profile" || pathname === "/profile/";
   // Check if any services subpage is active for desktop dropdown highlighting
   const isAnyServicesPage = isServicesPage || isStoragePage || isSourcingPage || isThreePlServicePage || isProductQualityCheckPage;
 
-  // Don't show main header on products page for mobile
-  const showMainHeader = !(isMobile && (isProductsPage || isPricingPage));
-
-  // Determine background color for laptop screens - MOVED AFTER PAGE VARIABLES
-  // Determine background color for laptop screens
   const getHeaderBackground = () => {
-    // For laptop screens (non-mobile)
-    if (!isMobile) {
-      if (scrolled) {
-        return "bg-gradient-to-r from-[#1C45A7] to-[#0B1B41]";
-      }
-      // For laptop home page when not scrolled - transparent
-      if (pathname === "/") {
-        return ""; // Transparent for laptop home page
-      }
-      // For other pages (products, pricing, services, about) - always show blue background
-      if (
-        pathname === "/products" ||
-        pathname === "/pricing" ||
-        pathname === "/about" ||
-        pathname === "/services" ||
-        pathname.startsWith("/services/")
-      ) {
-        return "bg-[#175CFF]"; // Blue background for these pages
-      }
-      return "bg-[#175CFF]"; // Default blue background for other laptop pages
+    // Always show gradient for About page on all devices
+    if (pathname === "/about") {
+      return "bg-gradient-to-r from-[#1C45A7] to-[#0B1B41]";
     }
 
-    // For mobile, use existing logic but make home page transparent initially
-    // For mobile, use existing logic but make home page transparent initially
-// For mobile, use existing logic but make home page transparent initially
-if (scrolled) {
-  return "bg-gradient-to-r from-[#1C45A7] to-[#0B1B41]";
-}
-// For mobile about page - always show blue background (even when not scrolled)
-if (pathname === "/about") {
-  return "bg-[#175CFF]";
-}
-// For mobile home page - transparent when not scrolled
-if (pathname === "/") {
-  return ""; // Transparent for mobile home page when not scrolled
-}
-if (isServicesPage || isStoragePage || isSourcingPage || 
-    isThreePlServicePage || isProductQualityCheckPage || isProductsPage || isPricingPage) {
-  return "bg-[#175CFF]";
-}
-return ""; // Transparent for other mobile pages when not scrolled// Transparent for other mobile pages when not scrolled// Transparent for other mobile pages when not scrolled
-  };
+    // For home page - transparent when not scrolled, gradient when scrolled
+    if (pathname === "/") {
+      return scrolled ? "bg-gradient-to-r from-[#1C45A7] to-[#0B1B41]" : "";
+    }
+
+    // For all other pages - always show gradient background
+    return "bg-gradient-to-r from-[#1C45A7] to-[#0B1B41]";
+  };   
+
+ // Only show main header if not on mobile products page
+const showMainHeader = !(isMobile && isProductsPage);
 
   return (
     <>
-      {/* Main Header - Original Desktop Version - Hidden on Products page for mobile */}
+      {/* Main Header - Only show if not mobile products page */}
       {showMainHeader && (
-        <header
-          className={`py-6 px-6 flex justify-between items-center fixed w-full z-50 transition-all duration-300 ${getHeaderBackground()}`}
-        >
-          {/* Logo */}
-          <div className="flex items-center">
-            <img
-              src="/my7.webp"
-              alt="Naxi Logo"
-              className="md:w-32 w-26 h-auto cursor-pointer"
-            />
-          </div>
+      <header
+        className={`py-6 px-6 flex justify-between items-center fixed w-full z-50 transition-all duration-300 ${getHeaderBackground()}`}
+      >
+        {/* Logo */}
+        <div className="flex items-center">
+          <img
+            src="/my7.webp"
+            alt="Naxi Logo"
+            className="md:w-32 w-26 h-auto cursor-pointer"
+          />
+        </div>
 
-          {/* Desktop Nav - Updated with Services Dropdown */}
-          <nav className="hidden lg:flex space-x-20 items-center">
-            <a href="/" className="text-white hover:underline">
-              Home
-            </a>
-            <a href="/products" className="text-white hover:underline">
-              Products
-            </a>
-            <a href="/about" className="text-white hover:underline">
-              About Us
-            </a>
+        {/* Desktop Nav - Updated with Services Dropdown */}
+        <nav className="hidden lg:flex space-x-20 items-center">
+          <a href="/" className="text-white hover:underline">
+            Home
+          </a>
+          <a href="/products" className="text-white hover:underline">
+            Products
+          </a>
+          <a href="/about" className="text-white hover:underline">
+            About Us
+          </a>
 
-            {/* Services Dropdown */}
-            <div className="relative">
-              <button
-                className={`flex items-center space-x-1 ${isAnyServicesPage ? "text-blue-300 underline" : "text-white"
-                  } hover:underline transition-colors`}
+          {/* Services Dropdown */}
+          <div className="relative">
+            <button
+              className={`flex items-center space-x-1 ${isAnyServicesPage ? "text-blue-300 underline" : "text-white"
+                } hover:underline transition-colors`}
+              onMouseEnter={() => setServicesDropdownOpen(true)}
+              onMouseLeave={() => setServicesDropdownOpen(false)}
+            >
+              <span>Services</span>
+              <ChevronDown
+                size={16}
+                className={`transform transition-transform ${servicesDropdownOpen ? "rotate-180" : ""
+                  }`}
+              />
+            </button>
+
+            {/* Dropdown Menu */}
+            {servicesDropdownOpen && (
+              <div
+                className="absolute top-full left-0 mt-2 w-64 bg-white rounded-lg shadow-lg py-2 z-50"
                 onMouseEnter={() => setServicesDropdownOpen(true)}
                 onMouseLeave={() => setServicesDropdownOpen(false)}
               >
-                <span>Services</span>
-                <ChevronDown
-                  size={16}
-                  className={`transform transition-transform ${servicesDropdownOpen ? "rotate-180" : ""
+                <a
+                  href="/services"
+                  className={`flex items-center gap-3 px-4 py-3 text-sm hover:bg-blue-50 transition-colors ${isServicesPage ? "text-blue-600 font-medium bg-blue-50" : "text-gray-700"
                     }`}
-                />
-              </button>
-
-              {/* Dropdown Menu */}
-              {servicesDropdownOpen && (
-                <div
-                  className="absolute top-full left-0 mt-2 w-64 bg-white rounded-lg shadow-lg py-2 z-50"
-                  onMouseEnter={() => setServicesDropdownOpen(true)}
-                  onMouseLeave={() => setServicesDropdownOpen(false)}
                 >
-                  <a
-                    href="/services"
-                    className={`flex items-center gap-3 px-4 py-3 text-sm hover:bg-blue-50 transition-colors ${isServicesPage ? "text-blue-600 font-medium bg-blue-50" : "text-gray-700"
-                      }`}
-                  >
-                    <span>All Services</span>
-                  </a>
-                  <a
-                    href="/services/storage"
-                    className={`flex items-center gap-3 px-4 py-3 text-sm hover:bg-blue-50 transition-colors ${isStoragePage ? "text-blue-600 font-medium bg-blue-50" : "text-gray-700"
-                      }`}
-                  >
-                    <FaWarehouse size={16} className="text-blue-500" />
-                    <span>Storage</span>
-                  </a>
-                  <a
-                    href="/services/sourcing"
-                    className={`flex items-center gap-3 px-4 py-3 text-sm hover:bg-blue-50 transition-colors ${isSourcingPage ? "text-blue-600 font-medium bg-blue-50" : "text-gray-700"
-                      }`}
-                  >
-                    <FaSearch size={16} className="text-blue-500" />
-                    <span>Sourcing</span>
-                  </a>
-                  <a
-                    href="/services/threeplservice"
-                    className={`flex items-center gap-3 px-4 py-3 text-sm hover:bg-blue-50 transition-colors ${isThreePlServicePage ? "text-blue-600 font-medium bg-blue-50" : "text-gray-700"
-                      }`}
-                  >
-                    <FaTruck size={16} className="text-blue-500" />
-                    <span>3PL Service</span>
-                  </a>
-                  <a
-                    href="/services/productqualitycheck"
-                    className={`flex items-center gap-3 px-4 py-3 text-sm hover:bg-blue-50 transition-colors ${isProductQualityCheckPage ? "text-blue-600 font-medium bg-blue-50" : "text-gray-700"
-                      }`}
-                  >
-                    <FaClipboardCheck size={16} className="text-blue-500" />
-                    <span>Quality Check</span>
-                  </a>
-                </div>
-              )}
-            </div>
-
-            <a href="/pricing" className="text-white hover:underline">
-              Pricing
-            </a>
-            <a href="/support" className="text-white hover:underline">
-              Support
-            </a>
-          </nav>
-
-          {/* Desktop Icons - Original */}
-          <div className="hidden lg:flex items-center space-x-8">
-            <img
-              src="/vector (10).png"
-              alt="Notifications"
-              className="w-6 h-7 cursor-pointer hover:opacity-80"
-            />
-            <img
-              src="/profile.png"
-              alt="Profile"
-              className="w-12 h-12 rounded-full cursor-pointer hover:opacity-80"
-            />
+                  <span>All Services</span>
+                </a>
+                <a
+                  href="/services/storage"
+                  className={`flex items-center gap-3 px-4 py-3 text-sm hover:bg-blue-50 transition-colors ${isStoragePage ? "text-blue-600 font-medium bg-blue-50" : "text-gray-700"
+                    }`}
+                >
+                  <FaWarehouse size={16} className="text-blue-500" />
+                  <span>Storage</span>
+                </a>
+                <a
+                  href="/services/sourcing"
+                  className={`flex items-center gap-3 px-4 py-3 text-sm hover:bg-blue-50 transition-colors ${isSourcingPage ? "text-blue-600 font-medium bg-blue-50" : "text-gray-700"
+                    }`}
+                >
+                  <FaSearch size={16} className="text-blue-500" />
+                  <span>Sourcing</span>
+                </a>
+                <a
+                  href="/services/threeplservice"
+                  className={`flex items-center gap-3 px-4 py-3 text-sm hover:bg-blue-50 transition-colors ${isThreePlServicePage ? "text-blue-600 font-medium bg-blue-50" : "text-gray-700"
+                    }`}
+                >
+                  <FaTruck size={16} className="text-blue-500" />
+                  <span>3PL Service</span>
+                </a>
+                <a
+                  href="/services/productqualitycheck"
+                  className={`flex items-center gap-3 px-4 py-3 text-sm hover:bg-blue-50 transition-colors ${isProductQualityCheckPage ? "text-blue-600 font-medium bg-blue-50" : "text-gray-700"
+                    }`}
+                >
+                  <FaClipboardCheck size={16} className="text-blue-500" />
+                  <span>Quality Check</span>
+                </a>
+              </div>
+            )}
           </div>
 
-          {/* Mobile/Tablet - Removed Hamburger */}
-          <div className="lg:hidden">
-            {/* Empty div to maintain layout */}
-          </div>
-        </header>
+          <a href="/pricing" className="text-white hover:underline">
+            Pricing
+          </a>
+          <a href="/support" className="text-white hover:underline">
+            Support
+          </a>
+        </nav>
+
+        {/* Desktop Icons - Original */}
+        <div className="hidden lg:flex items-center space-x-8">
+          <img
+            src="/vector (10).png"
+            alt="Notifications"
+            className="w-6 h-7 cursor-pointer hover:opacity-80"
+          />
+          <img
+            src="/profile.png"
+            alt="Profile"
+            className="w-12 h-12 rounded-full cursor-pointer hover:opacity-80"
+          />
+        </div>
+
+        {/* Mobile/Tablet - Removed Hamburger */}
+        <div className="lg:hidden">
+          {/* Empty div to maintain layout */}
+        </div>
+      </header>
       )}
 
-      {/* Rest of your mobile bottom navigation and more menu remains the same */}
-      {/* Mobile Bottom Navigation Bar - Updated with Union.png for selected tab */}
-      <div className="lg:hidden fixed bottom-0  bg-blue-500 border-t rounded-tl-2xl rounded-tr-2xl border-gray-200 z-40">
-        <div className="flex justify-around items-center">
-          {/* Home Tab */}
-          <a
-            href="/"
-            className="flex flex-col items-center relative flex-1"
-          >
-            {isHomePage ? (
-              <div className="relative flex flex-col items-center px-4 py-2 mt-4">
-                {/* Union.png background for selected tab */}
-                <img
-                  src="/Union.png"
-                  alt="Selected Tab"
-                  className="absolute top-0 w-full h-full object-cover"
-                />
-                {/* Content */}
-                <div className="relative z-10 flex flex-col items-center">
-                  <Home size={22} className="text-blue-700" />
-                  <span className="text-xs mt-1 text-blue-700">Home</span>
-                </div>
-              </div>
-            ) : (
-              <div className="flex flex-col items-center px-4 py-2 text-white hover:text-gray-200 transition-colors">
-                <Home size={22} />
-                <span className="text-xs mt-1">Home</span>
-              </div>
-            )}
-          </a>
-
-          {/* Products Tab */}
-          <a
-            href="/products"
-            className="flex flex-col items-center relative flex-1"
-          >
-            {isProductsPage ? (
-              <div className="relative flex flex-col items-center px-4 py-2 mt-4">
-                {/* Union.png background for selected tab */}
-                <img
-                  src="/Union.png"
-                  alt="Selected Tab"
-                  className="absolute top-0 w-full h-full object-cover"
-                />
-                {/* Content */}
-                <div className="relative z-10 flex flex-col items-center">
-                  <Package size={22} className="text-blue-700" />
-                  <span className="text-xs mt-1 text-blue-700">Products</span>
-                </div>
-              </div>
-            ) : (
-              <div className="flex flex-col items-center px-4 py-2 text-white hover:text-gray-200 transition-colors">
-                <Package size={22} />
-                <span className="text-xs mt-1">Products</span>
-              </div>
-            )}
-          </a>
-
-          {/* About Us Tab */}
-          <a
-            href="/about"
-            className="flex flex-col items-center relative flex-1"
-          >
-            {isAboutPage ? (
-              <div className="relative flex flex-col items-center px-4 py-2 mt-4">
-                {/* Union.png background for selected tab */}
-                <img
-                  src="/Union.png"
-                  alt="Selected Tab"
-                  className="absolute top-0 w-full h-full object-cover"
-                />
-                {/* Content */}
-                <div className="relative z-10 flex flex-col items-center">
-                  <Users size={22} className="text-blue-700" />
-                  <span className="text-xs mt-1 text-blue-700 whitespace-nowrap">About Us</span>
-                </div>
-              </div>
-            ) : (
-              <div className="flex flex-col items-center px-4 py-2 text-white hover:text-gray-200 transition-colors">
-                <Users size={22} />
-                <span className="text-xs mt-1 whitespace-nowrap">About Us</span>
-              </div>
-            )}
-          </a>
-
-          {/* Profile Tab */}
-          <a
-            href="/profile"
-            className="flex flex-col items-center relative flex-1"
-          >
-            {isProfilePage ? (
-              <div className="relative flex flex-col items-center px-4 py-2 mt-4">
-                {/* Union.png background for selected tab */}
-                <img
-                  src="/Union.png"
-                  alt="Selected Tab"
-                  className="absolute top-0 w-full h-full object-cover"
-                />
-                {/* Content */}
-                <div className="relative z-10 flex flex-col items-center">
-                  <User size={22} className="text-blue-700" />
-                  <span className="text-xs mt-1 text-blue-700">Profile</span>
-                </div>
-              </div>
-            ) : (
-              <div className="flex flex-col items-center px-4 py-2 text-white hover:text-gray-200 transition-colors">
-                <User size={22} />
-                <span className="text-xs mt-1">Profile</span>
-              </div>
-            )}
-          </a>
-
-          {/* More Tab */}
-          <button
-            onClick={() => setMenuOpen(true)}
-            className="flex flex-col items-center relative flex-1 text-white hover:text-gray-200 transition-colors"
-          >
-            <div className="flex flex-col items-center px-4 py-2">
-              <Menu size={22} />
-              <span className="text-xs mt-1">More</span>
-            </div>
-          </button>
+      {/* Mobile Bottom Navigation Bar - Hide on products page */}
+      {isMobile && (
+        <div className="lg:hidden fixed bottom-0 left-0 right-0 bg-blue-500 border-t rounded-tl-2xl rounded-tr-2xl border-gray-200 z-40">
+  <div className="flex justify-around items-center">
+    {/* Home Tab */}
+    <a href="/" className="flex flex-col items-center relative flex-1">
+      {isHomePage ? (
+        <div className="relative flex flex-col items-center px-4 py-2 mt-4">
+          <img
+            src="/Union.png"
+            alt="Selected Tab"
+            className="absolute top-0 w-full h-full object-cover"
+          />
+          <div className="relative z-10 flex flex-col items-center">
+            <Home size={22} className="text-blue-700" />
+            <span className="text-xs mt-1 text-blue-700">Home</span>
+          </div>
         </div>
-      </div>
+      ) : (
+        <div className="flex flex-col items-center px-4 py-2 text-white hover:text-gray-200 transition-colors">
+          <Home size={22} />
+          <span className="text-xs mt-1">Home</span>
+        </div>
+      )}
+    </a>
 
-      {/* More Menu Popup - Updated with matching colors */}
+    {/* Products Tab */}
+    <a href="/products" className="flex flex-col items-center relative flex-1">
+      {isProductsPage ? (
+        <div className="relative flex flex-col items-center px-4 py-2 mt-4">
+          <img
+            src="/Union.png"
+            alt="Selected Tab"
+            className="absolute top-0 w-full h-full object-cover"
+          />
+          <div className="relative z-10 flex flex-col items-center">
+            <Package size={22} className="text-blue-700" />
+            <span className="text-xs mt-1 text-blue-700">Products</span>
+          </div>
+        </div>
+      ) : (
+        <div className="flex flex-col items-center px-4 py-2 text-white hover:text-gray-200 transition-colors">
+          <Package size={22} />
+          <span className="text-xs mt-1">Products</span>
+        </div>
+      )}
+    </a>
+
+    {/* About Us Tab */}
+    <a href="/about" className="flex flex-col items-center relative flex-1">
+      {isAboutPage ? (
+        <div className="relative flex flex-col items-center px-4 py-2 mt-4">
+          <img
+            src="/Union.png"
+            alt="Selected Tab"
+            className="absolute top-0 w-full h-full object-cover"
+          />
+          <div className="relative z-10 flex flex-col items-center">
+            <Users size={22} className="text-blue-700" />
+            <span className="text-xs mt-1 text-blue-700 whitespace-nowrap">About Us</span>
+          </div>
+        </div>
+      ) : (
+        <div className="flex flex-col items-center px-4 py-2 text-white hover:text-gray-200 transition-colors">
+          <Users size={22} />
+          <span className="text-xs mt-1 whitespace-nowrap">About Us</span>
+        </div>
+      )}
+    </a>
+
+    {/* Profile Tab */}
+    <a href="/profile" className="flex flex-col items-center relative flex-1">
+      {isProfilePage ? (
+        <div className="relative flex flex-col items-center px-4 py-2 mt-4">
+          <img
+            src="/Union.png"
+            alt="Selected Tab"
+            className="absolute top-0 w-full h-full object-cover"
+          />
+          <div className="relative z-10 flex flex-col items-center">
+            <User size={22} className="text-blue-700" />
+            <span className="text-xs mt-1 text-blue-700">Profile</span>
+          </div>
+        </div>
+      ) : (
+        <div className="flex flex-col items-center px-4 py-2 text-white hover:text-gray-200 transition-colors">
+          <User size={22} />
+          <span className="text-xs mt-1">Profile</span>
+        </div>
+      )}
+    </a>
+
+    {/* More Tab */}
+    <button
+      onClick={() => setMenuOpen(true)}
+      className="flex flex-col items-center relative flex-1 text-white hover:text-gray-200 transition-colors"
+    >
+      <div className="flex flex-col items-center px-4 py-2">
+        <Menu size={22} />
+        <span className="text-xs mt-1">More</span>
+      </div>
+    </button>
+  </div>
+</div>
+      )}
+
+      {/* More Menu Popup */}
       {menuOpen && (
         <div className="lg:hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-end justify-center">
           <div className="bg-gradient-to-b from-[#1C45A7] to-[#0B1B41] rounded-t-3xl w-full max-w-lg mx-auto max-h-[80vh] overflow-y-auto">
@@ -416,7 +365,6 @@ return ""; // Transparent for other mobile pages when not scrolled// Transparent
               <a href="/alerts" className="flex items-center p-3 hover:bg-blue-600 rounded-lg text-white transition-colors">
                 <span className="font-medium">Alerts</span>
               </a>
-
             </div>
           </div>
         </div>

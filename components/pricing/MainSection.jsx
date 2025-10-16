@@ -48,16 +48,16 @@ export default function MainSection() {
       </section>
 
       {/* Mobile Layout */}
-      <section className="md:hidden pb-6 bg-gray-100 ">
+      <section className="md:hidden pb-6 bg-gray-100 pt-20">
   <div className="mx-auto relative">
     <div className="relative shadow-lg">
       <div className="absolute inset-0 pointer-events-none">
         {/* Logo on top left */}
-        <img
+        {/* <img
           src="/Group (3).png"
           alt="Naxi Logo"
           className="z-20 absolute left-4 top-4 w-20 h-auto object-contain"
-        />
+        /> */}
         <img
           src="/cart.png"
           alt="Product 2"
@@ -66,7 +66,7 @@ export default function MainSection() {
       <img
   src="/wor.png"
   alt="Product 4"
-  className="z-20 fixed left-65 top-4 w-40 h-40 object-contain"
+  className="z-20 fixed left-65 top-25 w-40 h-40 object-contain"
 />
       </div>
       <div className="bg-[radial-gradient(circle_at_center,#175CFF_0%,#0E3799_100%)] p-4 flex flex-col justify-center items-center text-center h-48 overflow-hidden">
